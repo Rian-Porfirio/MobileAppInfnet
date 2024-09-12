@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "604774879657",
+    "project_id": "mobileinfnet-1193b",
+    "storage_bucket": "mobileinfnet-1193b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:604774879657:android:0d17b404fa6d281d3934b8",
+        "android_client_info": {
+          "package_name": "com.infnet.mobileapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgc4tklh6VYxkyrQ6Fu5qoLrvRZF1jaTA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

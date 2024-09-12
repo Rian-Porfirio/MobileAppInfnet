@@ -25,7 +25,7 @@ export default function Default(){
                 />
             </View>
             <Animatable.View
-                animation="shake"
+                animation="fadeInUp"
                 delay={600}
                 style={styles.containerForm}
             >

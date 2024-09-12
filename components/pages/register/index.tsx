@@ -1,22 +1,29 @@
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
-import * as Animatable from "react-native-animatable";
+
+import * as Animatable from "react-native-animatable"
+import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 
-export default function Login(){
+export default function Register(){
 
     const navigator = useNavigation();
 
+    const showModal = ()=>{
+        Alert.alert(
+             "Cadastro",
+             "Cadastro realizado com sucesso",
+             [
+                 {text: "Entrar", onPress:()=> navigator.goBack()}
+            ]
+        )
+    }
+
     return(
         <View style={styles.container}>
-            <Animatable.View
-                animation="fadeInLeft"
-                delay={100}
-                style={styles.containerHeader}
-            >
+            <View style={styles.containerHeader}>
                 <Text style={styles.message}>Bem-vindo(a)</Text>
-            </Animatable.View>
+            </View>
 
-            <Animatable.View animation="fadeInUp" delay={600} style={styles.containerForm}>
+            <Animatable.View animation="fadeInUpBig" style={styles.containerForm}>
                 <Text style={styles.title}>E-mail</Text>
                 <TextInput
                     placeholder="Digite seu e-mail"
@@ -29,16 +36,18 @@ export default function Login(){
                     style={styles.input}
                 />
 
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>Entrar</Text>
-                </TouchableOpacity>
+                <Text style={styles.title}>Confirmar Senha</Text>
+                <TextInput
+                    placeholder="Digite novamente sua senha"
+                    style={styles.input}
+                />
 
-                <Text style={styles.textLink}>Não possui uma conta?
-                    <Text style={styles.link} onPress={()=> navigator.navigate("register")}>Registre-se</Text>
-                </Text>
+                <TouchableOpacity style={styles.button} onPress={showModal}>
+                    <Text style={styles.buttonText}>Cadastrar</Text>
+                </TouchableOpacity>
             </Animatable.View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
