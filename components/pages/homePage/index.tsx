@@ -1,6 +1,7 @@
 import {View, Text, Alert} from "react-native";
 import Table from "@/components/Table";
 import FabButton from "@/components/Fab";
+import List from "@/components/List"
 
 const showModal = ()=>{
     Alert.alert(
@@ -18,6 +19,7 @@ export default function HomePage(){
         <View>
             <Text>Outros componentes</Text>
             <Table />
+            <List />
             <FabButton onPress={showModal}/>
         </View>
     )

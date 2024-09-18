@@ -43,7 +43,7 @@ export default function Routes(){
                 options={{headerShown: false}}
             />
             <Stack.Screen
-                name={"editProfile"}
+                name={"edit"}
                 component={EditProfile}
                 options={{headerShown: false}}
             />

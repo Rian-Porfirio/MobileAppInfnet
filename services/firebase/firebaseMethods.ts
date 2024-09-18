@@ -1,13 +1,11 @@
-import { collection, addDoc, doc, updateDoc, deleteDoc, getDocs } from 'firebase/firestore';
+import {collection, addDoc, getDoc, doc, updateDoc, deleteDoc, getDocs, onSnapshot} from 'firebase/firestore';
 import { auth, db } from "../firebase/databaseKeys";
 import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
     sendPasswordResetEmail
 } from "@firebase/auth"
-import { launchImageLibrary } from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
-import database from "@react-native-firebase/database";
 
 export async function loginAuth(email: string, password: string){
    await signInWithEmailAndPassword(auth, email, password)
@@ -46,28 +44,6 @@ export async function changePassword(email: string){
         .then(()=> alert("email enviado"))
         .catch((erro)=> alert(`error ${erro.code} says ${erro.message}`))
 }
-
-export const uploadProfileImage = async () => {
-    const result = await launchImageLibrary({ mediaType: 'photo' });
-
-    if (result.assets) {
-        const imageUri = result.assets[0].uri;
-        // @ts-ignore
-        const uploadTask = storage().ref(`/profileImages/${Date.now()}`).putFile(imageUri);
-
-        uploadTask.on('state_changed', taskSnapshot => {
-            console.log(`${taskSnapshot.bytesTransferred} transferred out of ${taskSnapshot.totalBytes}`);
-        });
-
-        await uploadTask;
-        // @ts-ignore
-        const downloadUrl = await uploadTask.snapshot.ref.getDownloadURL();
-        console.log('File available at', downloadUrl);
-    }
-};
-
-
-
 
 export const addItemToList = async (item) => {
     try {
@@ -113,4 +89,62 @@ export const getAllItems = async () => {
         console.error('Erro ao buscar itens:', error);
         return [];
     }
+};
+
+export const fetchProfile = async () => {
+    try {
+        const profileDoc = await getDoc(doc(db, 'perfil', "eXQsJwBtZWFzeO6ZCebQ"));
+        if (profileDoc.exists()) {
+            return profileDoc.data();
+        } else {
+            console.log('Nenhum perfil encontrado.');
+            return null;
+        }
+    } catch (error) {
+        console.error('Erro ao buscar perfil:', error);
+        return null;
+    }
+};
+
+export const handleSave = async ( name, occupation, photo) => {
+    if (name && occupation) {
+        try {
+            await updateDoc(doc(db, 'perfil', "eXQsJwBtZWFzeO6ZCebQ"), {
+                nome: name,
+                ocupacao: occupation,
+                foto: photo,
+            });
+            console.log('Perfil atualizado com sucesso!');
+            return true;
+        } catch (error) {
+            console.error('Erro ao atualizar perfil:', error);
+            return false;
+        }
+    } else {
+        console.error('Preencha todos os campos.');
+        return false;
+    }
+};
+
+export const subscribeToProfile = (callback) => {
+    const profileDoc = doc(db, 'perfil', "eXQsJwBtZWFzeO6ZCebQ");
+
+    return onSnapshot(profileDoc, (docSnap) => {
+        if (docSnap.exists()) {
+            callback(docSnap.data());
+        } else {
+            console.log('No such document!');
+            callback(null);
+        }
+    }, (error) => {
+        console.error('Error fetching profile:', error);
+        callback(null);
+    });
+};
+
+const uploadImage = async (uri: string) => {
+    const imageName = uri.substring(uri.lastIndexOf('/') + 1);
+    const ref = storage().ref(`images/${imageName}`);
+    await ref.putFile(uri);
+    return ref.getDownloadURL();
 };

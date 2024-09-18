@@ -1,10 +1,12 @@
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import HomePage from "@/components/pages/homePage";
 import Profile from "@/components/pages/profile";
+import EditProfile from "@/components/pages/editProfile";
 
 const tabRoutes = [
     {route: "home", label: "Home", component: HomePage,},
     {route: "profile", label: "Profile", component: Profile,},
+    {route: "edi", label: "Edit Profile", component: EditProfile,},
 ]
 
 const Tab = createBottomTabNavigator();

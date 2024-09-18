@@ -1,59 +1,65 @@
-import {View, StyleSheet, Text, TouchableOpacity, Image} from "react-native";
-import AvatarComp from "../../Avatar"
-import {useNavigation} from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Text} from "react-native";
+import AvatarComp from "../../Avatar";
 import PhotoGrid from "@/components/ImageGrid";
+import { subscribeToProfile } from "../../../services/firebase/firebaseMethods";
 
-export default function Profile(){
+export default function Profile() {
+    const [profileData, setProfileData] = useState({
+        nome: '',
+        ocupacao: '',
+        foto: ''
+    });
 
-    const navigation = useNavigation();
+    useEffect(() => {
+        const unsubscribe = subscribeToProfile((data) => {
+            if (data) {
+                setProfileData(data);
+            }
+        });
 
-    return(
+        return () => unsubscribe();
+    }, []);
+
+    return (
         <View style={styles.container}>
-            <View style={styles.profile}>
+            <View style={styles.profile} />
 
-            </View>
-                <View style={styles.profileForm}>
-
-                    <View style={styles.profilePicture}>
-                        <AvatarComp source={require("../../../assets/images/perfil.jpg")} size={150}/>
-                        <View style={styles.editButton}>
-                            <TouchableOpacity>
-                                <Image style={styles.editIcon}
-                                    source={require("../../../assets/images/edit.png")}
-
-                                    resizeMode={"contain"}
-                                />
-                            </TouchableOpacity>
-                        </View>
-                        <Text style={styles.profileText}>Rian Porfírio</Text>
-                        <Text style={styles.profileDescripText}>Software Developer</Text>
+            <View style={styles.profileForm}>
+                <View style={styles.profilePicture}>
+                    <AvatarComp source={{ uri: profileData.foto }} size={150} />
+                    <View style={styles.editButton}>
                     </View>
+                    <Text style={styles.profileText}>{profileData.nome}</Text>
+                    <Text style={styles.profileDescripText}>{profileData.ocupacao}</Text>
+                </View>
 
-                    <View style={styles.separator}/>
+                <View style={styles.separator} />
 
-                    <View style={styles.profileAchiv}>
-                        <View style={styles.achivItem}>
-                            <Text style={styles.achivNumber}>122</Text>
-                            <Text style={styles.achivLabel}>followers</Text>
-                        </View>
-                        <View style={styles.achivItem}>
-                            <Text style={styles.achivNumber}>67</Text>
-                            <Text style={styles.achivLabel}>following</Text>
-                        </View>
-                        <View style={styles.achivItem}>
-                            <Text style={styles.achivNumber}>37K</Text>
-                            <Text style={styles.achivLabel}>likes</Text>
-                        </View>
+                <View style={styles.profileAchiv}>
+                    <View style={styles.achivItem}>
+                        <Text style={styles.achivNumber}>122</Text>
+                        <Text style={styles.achivLabel}>followers</Text>
                     </View>
+                    <View style={styles.achivItem}>
+                        <Text style={styles.achivNumber}>67</Text>
+                        <Text style={styles.achivLabel}>following</Text>
+                    </View>
+                    <View style={styles.achivItem}>
+                        <Text style={styles.achivNumber}>37K</Text>
+                        <Text style={styles.achivLabel}>likes</Text>
+                    </View>
+                </View>
 
                 <View style={styles.photoSection}>
-                    <Text style={{fontSize: 24, marginLeft: "3%"}}>Photos</Text>
+                    <Text style={{ fontSize: 24, marginLeft: "3%" }}>Photos</Text>
                     <PhotoGrid />
                 </View>
             </View>
         </View>
-    )
+    );
 }
+
 
 const styles = StyleSheet.create({
     container: {
