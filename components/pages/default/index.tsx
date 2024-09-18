@@ -32,7 +32,7 @@ export default function Default(){
                 <Text style={styles.title}>Aplicativo Mobile Instituto Infnet</Text>
                 <Text style={styles.text}>Faça o login para continuar!</Text>
                 <TouchableOpacity
-                    onPress={ ()=> navigation.navigate("login")}
+                    onPress={()=> navigation.navigate("login")}
                     style={styles.button}
                 >
                     <Text style={styles.buttonText}>Login</Text>
@@ -52,7 +52,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#003f7a",
         justifyContent: "center",
         alignItems: "center",
-
     },
     containerForm: {
         flex: 1,

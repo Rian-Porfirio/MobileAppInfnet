@@ -2,10 +2,29 @@
 import * as Animatable from "react-native-animatable"
 import {Alert, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useNavigation} from "@react-navigation/native";
+import {useState} from "react";
+import {createAccountAuth, loginAuth} from "@/services/firebase/firebaseMethods";
 
 export default function Register(){
 
     const navigator = useNavigation();
+
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [passwordConfirm, setPasswordConfirm] = useState("");
+
+    const handleRegister = async ()=>{
+        if(password !== passwordConfirm)
+            return;
+
+        await createAccountAuth(email, password);
+    }
+
+    const handleClean = () =>{
+        setPasswordConfirm("");
+        setPassword("");
+        setEmail("");
+    }
 
     const showModal = ()=>{
         Alert.alert(
@@ -14,35 +33,44 @@ export default function Register(){
              [
                  {text: "Entrar", onPress:()=> navigator.goBack()}
             ]
-        )
+        );
     }
 
     return(
         <View style={styles.container}>
             <View style={styles.containerHeader}>
-                <Text style={styles.message}>Bem-vindo(a)</Text>
+                <Text style={styles.message}>Cadastre-se gratuitamente</Text>
             </View>
 
             <Animatable.View animation="fadeInUpBig" style={styles.containerForm}>
                 <Text style={styles.title}>E-mail</Text>
                 <TextInput
                     placeholder="Digite seu e-mail"
+                    onChangeText={(value)=> setEmail(value)}
                     style={styles.input}
+                    value={email}
                 />
 
                 <Text style={styles.title}>Senha</Text>
                 <TextInput
                     placeholder="Digite sua senha"
+                    onChangeText={(value)=> setPassword(value)}
                     style={styles.input}
+                    value={password}
                 />
 
                 <Text style={styles.title}>Confirmar Senha</Text>
                 <TextInput
                     placeholder="Digite novamente sua senha"
+                    onChangeText={(value)=> setPasswordConfirm(value)}
                     style={styles.input}
+                    value={passwordConfirm}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={showModal}>
+                <TouchableOpacity style={styles.button} onPress={()=> {
+                    handleRegister()
+                    handleClean()
+                }}>
                     <Text style={styles.buttonText}>Cadastrar</Text>
                 </TouchableOpacity>
             </Animatable.View>
@@ -84,7 +112,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
     button: {
-        borderRadius: 6,
+        borderRadius: 3,
         paddingVertical: 12,
         backgroundColor: "#053566",
         marginTop: 14,

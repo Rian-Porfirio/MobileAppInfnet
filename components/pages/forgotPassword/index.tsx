@@ -1,24 +1,18 @@
-import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import * as Animatable from "react-native-animatable";
-import {useNavigation} from "@react-navigation/native";
+import {StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import {useState} from "react";
-import {loginAuth} from "@/services/firebase/firebaseMethods";
+import {useNavigation} from "@react-navigation/native";
+import {changePassword} from "@/services/firebase/firebaseMethods";
 
-export default function Login(){
+
+export default function ForgotPassword(){
 
     const navigator = useNavigation();
 
     const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
 
-    const handleLogin = async ()=>{
-       await loginAuth(email, password)
-        navigator.navigate("homePage")
-    }
-
-    const handleClean = () =>{
-        setPassword("");
-        setEmail("");
+    const handleUpdatePwd = async ()=>{
+        await changePassword(email);
     }
 
     return(
@@ -28,40 +22,29 @@ export default function Login(){
                 delay={100}
                 style={styles.containerHeader}
             >
-                <Text style={styles.message}>Bem-vindo(a)</Text>
+                <Text style={styles.message}>Redefinir Senha</Text>
             </Animatable.View>
 
             <Animatable.View animation="fadeInUp" delay={600} style={styles.containerForm}>
-                <Text style={styles.title}>E-mail</Text>
+                <Text style={styles.title}>Email para recuperação</Text>
                 <TextInput
-                    placeholder="Digite seu e-mail"
+                    placeholder="Digite o email do seu usuário"
                     onChangeText={(value)=> setEmail(value)}
                     style={styles.input}
                     value={email}
                 />
 
-                <Text style={styles.title}>Senha</Text>
-                <TextInput
-                    placeholder="Digite sua senha"
-                    onChangeText={(value)=> setPassword(value)}
-                    style={styles.input}
-                    value={password}
-                />
-                <Text style={styles.link} onPress={()=> navigator.navigate("resetPassword")}>Esqueci a senha</Text>
-
-                <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Entrar</Text>
+                <TouchableOpacity style={styles.button} onPress={handleUpdatePwd}>
+                    <Text style={styles.buttonText}>Enviar</Text>
                 </TouchableOpacity>
 
-                <Text style={styles.textLink}>Não possui uma conta?
-                    <Text style={styles.link} onPress={()=> {
-                        navigator.navigate("register")
-                        handleClean()
-                    }}>Registre-se</Text>
-                </Text>
+                <Text style={styles.link} onPress={()=> {
+                    navigator.navigate("login");
+                }}>voltar</Text>
+
             </Animatable.View>
         </View>
-    )
+    );
 }
 
 const styles = StyleSheet.create({
@@ -80,7 +63,8 @@ const styles = StyleSheet.create({
         color: "#fff"
     },
     link: {
-        alignSelf: "flex-end",
+        marginTop: 12,
+        alignSelf: "center",
         textDecorationStyle: "dashed",
         color: "#166db7"
     },
