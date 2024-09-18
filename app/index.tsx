@@ -12,7 +12,7 @@ export default function Home(){
           <AppBar/>
           <StatusBar backgroundColor="#003f7a" barStyle="light-content" />
           <Routes />
-          {user && <BottomTab />}
+          <BottomTab />
       </>
   )
 }
